@@ -53,7 +53,8 @@ MousePreferencePane::MousePreferencePane(QWidget* parent)
   , m_rightKeyEditor(nullptr)
   , m_upKeyEditor(nullptr)
   , m_downKeyEditor(nullptr)
-  , m_flyMoveSpeedSlider(nullptr) {
+  , m_flyMoveSpeedSlider(nullptr) 
+  , m_flySpeedModifierSlider(nullptr) {
   createGui();
   bindEvents();
 }
@@ -91,6 +92,8 @@ void MousePreferencePane::createGui() {
 
   m_flyMoveSpeedSlider = new SliderWithLabel(0, 100);
   m_flyMoveSpeedSlider->setMaximumWidth(400);
+  m_flySpeedModifierSlider = new SliderWithLabel(11, 100);
+  m_flySpeedModifierSlider->setMaximumWidth(400);
 
   auto* layout = new FormWithSectionsLayout();
   layout->setContentsMargins(0, LayoutConstants::MediumVMargin, 0, 0);
@@ -127,6 +130,7 @@ void MousePreferencePane::createGui() {
     "",
     makeInfo(new QLabel(
       "Turn mouse wheel while holding right mouse button in 3D view to adjust speed on the fly.")));
+  layout->addRow("Speed Modifier", m_flySpeedModifierSlider);
 
   setLayout(layout);
   setMinimumWidth(400);
@@ -187,6 +191,10 @@ void MousePreferencePane::bindEvents() {
   connect(
     m_flyMoveSpeedSlider, &SliderWithLabel::valueChanged, this,
     &MousePreferencePane::flyMoveSpeedChanged);
+
+  connect(
+    m_flySpeedModifierSlider, &SliderWithLabel::valueChanged, this,
+    &MousePreferencePane::flySpeedModifierChanged);
 }
 
 bool MousePreferencePane::doCanResetToDefaults() {
@@ -217,6 +225,7 @@ void MousePreferencePane::doResetToDefaults() {
   prefs.resetToDefault(Preferences::CameraFlyDown());
 
   prefs.resetToDefault(Preferences::CameraFlyMoveSpeed);
+  prefs.resetToDefault(Preferences::CameraFlySpeedModifier);
 }
 
 void MousePreferencePane::doUpdateControls() {
@@ -243,6 +252,9 @@ void MousePreferencePane::doUpdateControls() {
 
   m_flyMoveSpeedSlider->setRatio(
     pref(Preferences::CameraFlyMoveSpeed) / Preferences::MaxCameraFlyMoveSpeed);
+  
+  m_flySpeedModifierSlider->setRatio(
+    pref(Preferences::CameraFlySpeedModifier) / (Preferences::MaxCameraFlySpeedModifier + Preferences::MinCameraFlySpeedModifier));
 }
 
 bool MousePreferencePane::doValidate() {
@@ -343,6 +355,13 @@ void MousePreferencePane::flyMoveSpeedChanged(const int /* value */) {
   const auto ratio = Preferences::MaxCameraFlyMoveSpeed * m_flyMoveSpeedSlider->ratio();
   PreferenceManager& prefs = PreferenceManager::instance();
   prefs.set(Preferences::CameraFlyMoveSpeed, ratio);
+}
+
+void MousePreferencePane::flySpeedModifierChanged(const int /* value */) {
+  const auto ratio = Preferences::MaxCameraFlySpeedModifier * m_flySpeedModifierSlider->ratio() + Preferences::MinCameraFlySpeedModifier;
+  std::cout << "Setting ratio to:" << ratio <<std::endl;
+  PreferenceManager& prefs = PreferenceManager::instance();
+  prefs.set(Preferences::CameraFlySpeedModifier, ratio);
 }
 
 void MousePreferencePane::setKeySequence(

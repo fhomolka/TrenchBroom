@@ -52,6 +52,7 @@ private:
   KeySequenceEdit* m_upKeyEditor;
   KeySequenceEdit* m_downKeyEditor;
   SliderWithLabel* m_flyMoveSpeedSlider;
+  SliderWithLabel* m_flySpeedModifierSlider;
 
 public:
   explicit MousePreferencePane(QWidget* parent = nullptr);
@@ -88,6 +89,7 @@ private slots:
   void downKeyChanged();
 
   void flyMoveSpeedChanged(int value);
+  void flySpeedModifierChanged(int value);
 
 private:
   void setKeySequence(KeySequenceEdit* editor, Preference<QKeySequence>& preference);
