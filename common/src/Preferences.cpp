@@ -225,6 +225,7 @@ Preference<bool> CameraMoveInCursorDir(
 Preference<float> CameraFov(IO::Path("Controls/Camera/Field of vision"), 90.0f);
 
 Preference<float> CameraFlyMoveSpeed(IO::Path("Controls/Camera/Fly move speed"), 0.5f);
+Preference<float> CameraFlySpeedModifier(IO::Path("Controls/Camera/Fly speed modifier"), 2.0f);
 
 Preference<bool> Link2DCameras(IO::Path("Controls/Camera/Link 2D cameras"), true);
 
