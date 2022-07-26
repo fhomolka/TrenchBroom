@@ -160,7 +160,7 @@ static constexpr auto MinCameraFlyMoveSpeed = 0.1f;
 static constexpr auto MaxCameraFlyMoveSpeed = 10.0f;
 extern Preference<float> CameraFlyMoveSpeed;
 static constexpr auto MinCameraFlySpeedModifier = 1.1f;
-static constexpr auto MaxCameraFlySpeedModifier = 5.0f;
+static constexpr auto MaxCameraFlySpeedModifier = 10.0f;
 extern Preference<float> CameraFlySpeedModifier;
 
 extern Preference<bool> Link2DCameras;
